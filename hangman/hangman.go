@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"regexp"
 	"time"
-	"log"
 )
 
 func main() {
@@ -22,12 +22,12 @@ func main() {
 
 		fmt.Scanln(&input)
 		isValid := isValidLetter(input)
-			if isValid{
-				break
-			}else {
-				fmt.Println("Not a valid input")
-			}
-		
+		if isValid {
+			break
+		} else {
+			fmt.Println("Not a valid input")
+		}
+
 	}
 	fmt.Println(input)
 }
