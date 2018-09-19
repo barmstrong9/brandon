@@ -5,10 +5,12 @@ import (
 	"log"
 	"math/rand"
 	"regexp"
+	"strings"
 	"time"
 )
 
 func main() {
+	var counter int
 	fmt.Println("Welcome To Hangman")
 	wordList := []string{"cactus", "mobile", "window", "laptop", "monitor"}
 	lengthOfWords := len(wordList)
@@ -17,18 +19,30 @@ func main() {
 	wordToGuess := wordList[randomNumber]
 	log.Println(wordToGuess)
 	input := ""
+
+	var dashWord string
 	for wordLength := 0; wordLength < int(len(wordToGuess)); wordLength++ {
-		fmt.Print("_ ")
+		dashWord += "-"
 	}
-	fmt.Println("")
-	
+
 	for {
 		fmt.Printf("Guess a letter:")
-		fmt.Scanln(&input)  
-		
+		fmt.Println("")
+
+		fmt.Println(dashWord)
+
+		fmt.Scanln(&input)
+
 		isValid := isValidLetter(input)
 		if isValid {
-			break
+			if guessLetter(wordToGuess, input) {
+				fmt.Println("correct")
+				dashWord = replaceDash(wordToGuess, dashWord, input)
+			} else {
+				fmt.Println("incorrect")
+			}
+			counter++
+			fmt.Println(counter)
 		} else {
 			fmt.Println("Not a valid input")
 		}
@@ -49,5 +63,21 @@ func isValidLetter(input string) bool {
 
 	}
 	return false
+}
+func guessLetter(wordToGuess string, guessCharacter string) bool {
+	lowerCaseCharacter := strings.ToLower(guessCharacter)
+	lowerWordToGuess := strings.ToLower(wordToGuess)
+
+	return strings.Contains(lowerWordToGuess, lowerCaseCharacter)
+}
+func replaceDash(wordToGuess string, dashWord string, guessCharacter string) string {
+	lowerCaseCharacter := strings.ToLower(guessCharacter)
+	for i, c := range wordToGuess{
+		if string(c) == lowerCaseCharacter{
+			dashWord = dashWord[:i] + string(lowerCaseCharacter) + dashWord[i+1:]
+		}
+	}
+
+	return dashWord
 
 }
