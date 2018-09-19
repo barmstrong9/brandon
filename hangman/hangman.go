@@ -17,19 +17,23 @@ func main() {
 	wordToGuess := wordList[randomNumber]
 	log.Println(wordToGuess)
 	input := ""
+	for wordLength := 0; wordLength < int(len(wordToGuess)); wordLength++ {
+		fmt.Print("_ ")
+	}
+	fmt.Println("")
+	
 	for {
 		fmt.Printf("Guess a letter:")
-
-		fmt.Scanln(&input)
+		fmt.Scanln(&input)  
+		
 		isValid := isValidLetter(input)
 		if isValid {
 			break
 		} else {
 			fmt.Println("Not a valid input")
 		}
-
 	}
-	fmt.Println(input)
+
 }
 func generateRandomNumber(lenWords int) int {
 	seed := rand.NewSource(time.Now().UnixNano())
