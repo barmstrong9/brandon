@@ -9,8 +9,14 @@ import (
 	"time"
 )
 
+var correctCounter int
+var incorrectCounter int
+var isDone bool
+var isLost bool
+var lostCounter int
+
 func main() {
-	var counter int
+	lostCounter = 10
 	fmt.Println("Welcome To Hangman")
 	wordList := []string{"cactus", "mobile", "window", "laptop", "monitor"}
 	lengthOfWords := len(wordList)
@@ -19,35 +25,51 @@ func main() {
 	wordToGuess := wordList[randomNumber]
 	log.Println(wordToGuess)
 	input := ""
-
 	var dashWord string
 	for wordLength := 0; wordLength < int(len(wordToGuess)); wordLength++ {
 		dashWord += "-"
 	}
 
 	for {
+		if isDone == true {
+			fmt.Println(dashWord)
+			fmt.Println("You Have Won!")
+			fmt.Println("")
+			break
+		}
+		if isLost == true {
+			fmt.Println("You Have Lost!")
+			fmt.Println("The correct word was", wordToGuess)
+			fmt.Println("")
+			break
+		}
 		fmt.Printf("Guess a letter:")
 		fmt.Println("")
 
 		fmt.Println(dashWord)
 
 		fmt.Scanln(&input)
+		
 
 		isValid := isValidLetter(input)
 		if isValid {
 			if guessLetter(wordToGuess, input) {
 				fmt.Println("correct")
 				dashWord = replaceDash(wordToGuess, dashWord, input)
-			} else {
-				fmt.Println("incorrect")
+			} else if guessLetter(wordToGuess, input) == false {
+				fmt.Println("Incorrect")
+				incorrectCounter++
+				fmt.Println(incorrectCounter)
+				if incorrectCounter == lostCounter {
+					isLost = true
+				}
+
 			}
-			counter++
-			fmt.Println(counter)
 		} else {
 			fmt.Println("Not a valid input")
 		}
+		input = ""
 	}
-
 }
 func generateRandomNumber(lenWords int) int {
 	seed := rand.NewSource(time.Now().UnixNano())
@@ -71,13 +93,18 @@ func guessLetter(wordToGuess string, guessCharacter string) bool {
 	return strings.Contains(lowerWordToGuess, lowerCaseCharacter)
 }
 func replaceDash(wordToGuess string, dashWord string, guessCharacter string) string {
+
 	lowerCaseCharacter := strings.ToLower(guessCharacter)
-	for i, c := range wordToGuess{
-		if string(c) == lowerCaseCharacter{
+	for i, c := range wordToGuess {
+		if string(c) == lowerCaseCharacter {
+
 			dashWord = dashWord[:i] + string(lowerCaseCharacter) + dashWord[i+1:]
+			correctCounter++
+			fmt.Println(correctCounter)
+			if correctCounter == int(len(wordToGuess)) {
+				isDone = true
+			}
 		}
 	}
-
 	return dashWord
-
 }
