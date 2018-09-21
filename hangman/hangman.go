@@ -51,8 +51,8 @@ func main() {
 		fmt.Scanln(&input)
 
 		isValid := isValidLetter(input)
-		for _, letter := range guessedLetter{
-			if  input == letter {
+		for _, letter := range guessedLetter {
+			if input == letter {
 				isValid = false
 			}
 		}
@@ -81,7 +81,8 @@ func main() {
 			fmt.Println("")
 			fmt.Println("Thats Is Not A Valid Input Or You Have Already Guessed That Letter, Try Again")
 		}
-		fmt.Println("So far you have guessed", guessedLetter)
+		fmt.Println("So far you have guessed:")
+		fmt.Println(strings.Join(guessedLetter, ", "))
 		fmt.Println("")
 		input = ""
 	}
