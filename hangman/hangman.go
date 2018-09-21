@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"log"
+	// "log"
 	"math/rand"
 	"regexp"
 	"strings"
@@ -13,16 +13,18 @@ var correctCounter int
 var incorrectCounter int
 var isDone bool
 var isLost bool
+var guessedLetter []string
 
 func main() {
+	gL := 0
 	lostCounter := 10
+	fmt.Println("")
 	fmt.Println("Welcome To Hangman")
+	fmt.Println("")
 	wordList := []string{"cactus", "mobile", "window", "laptop", "monitor"}
 	lengthOfWords := len(wordList)
 	randomNumber := generateRandomNumber(lengthOfWords)
-	fmt.Println(randomNumber)
 	wordToGuess := wordList[randomNumber]
-	log.Println(wordToGuess)
 	input := ""
 	var dashWord string
 	for wordLength := 0; wordLength < int(len(wordToGuess)); wordLength++ {
@@ -42,7 +44,7 @@ func main() {
 			fmt.Println("")
 			break
 		}
-		fmt.Printf("Guess a letter:")
+		fmt.Printf("Please Guess a Letter:")
 		fmt.Println("")
 
 		fmt.Println(dashWord)
@@ -50,24 +52,38 @@ func main() {
 		fmt.Scanln(&input)
 
 		isValid := isValidLetter(input)
+		for _, letter := range guessedLetter{
+			if  input == letter {
+				isValid = false
+			}
+		}
 		if isValid {
+			guessedLetter = append(guessedLetter, input)
 			if guessLetter(wordToGuess, input) {
-				drawHangman(incorrectCounter)
+				fmt.Println("")
 				fmt.Println("correct")
-				dashWord = replaceDash(wordToGuess, dashWord, input)
-			} else if guessLetter(wordToGuess, input) == false {
-				fmt.Println("Incorrect")
+				fmt.Println("")
 				drawHangman(incorrectCounter)
+				dashWord = replaceDash(wordToGuess, dashWord, input)
+				gL++
+			} else if guessLetter(wordToGuess, input) == false {
 				incorrectCounter++
-				fmt.Println(incorrectCounter)
+				fmt.Println("")
+				fmt.Println("Incorrect")
+				fmt.Println("")
+				drawHangman(incorrectCounter)
+				gL++
 				if incorrectCounter == lostCounter {
 					isLost = true
 				}
 
 			}
 		} else {
-			fmt.Println("Not a valid input")
+			fmt.Println("")
+			fmt.Println("Thats Is Not A Valid Input Or You Have Already Guessed That Letter, Try Again")
 		}
+		fmt.Println("So far you have guessed", guessedLetter)
+		fmt.Println("")
 		input = ""
 	}
 }
@@ -100,7 +116,6 @@ func replaceDash(wordToGuess string, dashWord string, guessCharacter string) str
 
 			dashWord = dashWord[:i] + string(lowerCaseCharacter) + dashWord[i+1:]
 			correctCounter++
-			fmt.Println(correctCounter)
 			if correctCounter == int(len(wordToGuess)) {
 				isDone = true
 			}
@@ -109,123 +124,123 @@ func replaceDash(wordToGuess string, dashWord string, guessCharacter string) str
 	return dashWord
 }
 func drawHangman(incorrectCounter int) {
-	switch incorrectCounter{
-		case 0:
-			fmt.Println("________")
-		case 1:
-			fmt.Println("+")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Printf("+")
-			fmt.Printf("________")
-			fmt.Println("")	
-	
-		case 2:
-			fmt.Println("+-----+")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Printf("+")
-			fmt.Printf("________")
-			fmt.Println("")	
-		
-		case 3:
-			fmt.Println("+-----+")
-			fmt.Println("|     |")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Printf("+")
-			fmt.Printf("________")
-			fmt.Println("")	
+	switch incorrectCounter {
+	case 1:
+		fmt.Println("________")
+	case 2:
+		fmt.Println("+")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Printf("+")
+		fmt.Printf("________")
+		fmt.Println("")
 
-		case 4:
-			fmt.Println("+-----+")
-			fmt.Println("|     |")
-			fmt.Println("|     O")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Printf("+")
-			fmt.Printf("________")
-			fmt.Println("")	
-			
-		case 5:
-			fmt.Println("+-----+")
-			fmt.Println("|     |")
-			fmt.Println("|     O")
-			fmt.Println("|     |")
-			fmt.Println("|     |")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Printf("+")
-			fmt.Printf("________")
-			fmt.Println("")	
-		
-		case 6:
-			fmt.Println("+-----+")
-			fmt.Println("|     |")
-			fmt.Println("|     O")
-			fmt.Println("|    /|")
-			fmt.Println("|     |")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Printf("+")
-			fmt.Printf("________")
-			fmt.Println("")
-			
-		case 7:
-			fmt.Println("+-----+")
-			fmt.Println("|     |")
-			fmt.Println("|     O")
-			fmt.Println("|    /|\\")
-			fmt.Println("|     |")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Printf("+")
-			fmt.Printf("________")
-			fmt.Println("")
+	case 3:
+		fmt.Println("+-----+")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Printf("+")
+		fmt.Printf("________")
+		fmt.Println("")
 
-		case 8:
-			fmt.Println("+-----+")
-			fmt.Println("|     |")
-			fmt.Println("|     O")
-			fmt.Println("|    /|\\")
-			fmt.Println("|     |")
-			fmt.Println("|    /")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Printf("+")
-			fmt.Printf("________")
-			fmt.Println("")
-		case 9:
-			fmt.Println("+-----+")
-			fmt.Println("|     |")
-			fmt.Println("|     O")
-			fmt.Println("|    /|\\")
-			fmt.Println("|     |")
-			fmt.Println("|    / \\")
-			fmt.Println("|")
-			fmt.Println("|")
-			fmt.Printf("+")
-			fmt.Printf("________")
-			fmt.Println("")
+	case 4:
+		fmt.Println("+-----+")
+		fmt.Println("|     |")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Printf("+")
+		fmt.Printf("________")
+		fmt.Println("")
+
+	case 5:
+		fmt.Println("+-----+")
+		fmt.Println("|     |")
+		fmt.Println("|     O")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Printf("+")
+		fmt.Printf("________")
+		fmt.Println("")
+
+	case 6:
+		fmt.Println("+-----+")
+		fmt.Println("|     |")
+		fmt.Println("|     O")
+		fmt.Println("|     |")
+		fmt.Println("|     |")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Printf("+")
+		fmt.Printf("________")
+		fmt.Println("")
+
+	case 7:
+		fmt.Println("+-----+")
+		fmt.Println("|     |")
+		fmt.Println("|     O")
+		fmt.Println("|    /|")
+		fmt.Println("|     |")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Printf("+")
+		fmt.Printf("________")
+		fmt.Println("")
+
+	case 8:
+		fmt.Println("+-----+")
+		fmt.Println("|     |")
+		fmt.Println("|     O")
+		fmt.Println("|    /|\\")
+		fmt.Println("|     |")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Printf("+")
+		fmt.Printf("________")
+		fmt.Println("")
+
+	case 9:
+		fmt.Println("+-----+")
+		fmt.Println("|     |")
+		fmt.Println("|     O")
+		fmt.Println("|    /|\\")
+		fmt.Println("|     |")
+		fmt.Println("|    /")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Printf("+")
+		fmt.Printf("________")
+		fmt.Println("")
+	case 10:
+		fmt.Println("+-----+")
+		fmt.Println("|     |")
+		fmt.Println("|     O")
+		fmt.Println("|    /|\\")
+		fmt.Println("|     |")
+		fmt.Println("|    / \\")
+		fmt.Println("|")
+		fmt.Println("|")
+		fmt.Printf("+")
+		fmt.Printf("________")
+		fmt.Println("")
 	}
 }
