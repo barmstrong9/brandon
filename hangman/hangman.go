@@ -17,8 +17,7 @@ var guessedLetter []string
 func main() {
 	gL := 0
 	lostCounter := 10
-	fmt.Println("")
-	fmt.Println("Welcome To Hangman")
+	fmt.Println("\nWelcome To Hangman")
 	fmt.Println("")
 	wordList := []string{"cactus", "mobile", "window", "laptop", "monitor"}
 	lengthOfWords := len(wordList)
@@ -51,24 +50,23 @@ func main() {
 		fmt.Scanln(&input)
 
 		isValid := isValidLetter(input)
+		lowerInput := strings.ToLower(input)
 		for _, letter := range guessedLetter {
-			if input == letter {
+			if lowerInput == letter {
 				isValid = false
 			}
 		}
 		if isValid {
-			guessedLetter = append(guessedLetter, input)
+			guessedLetter = append(guessedLetter, lowerInput)
 			if guessLetter(wordToGuess, input) {
-				fmt.Println("")
-				fmt.Println("correct")
+				fmt.Println("\ncorrect")
 				fmt.Println("")
 				drawHangman(incorrectCounter)
 				dashWord = replaceDash(wordToGuess, dashWord, input)
 				gL++
 			} else if guessLetter(wordToGuess, input) == false {
 				incorrectCounter++
-				fmt.Println("")
-				fmt.Println("Incorrect")
+				fmt.Println("\nIncorrect")
 				fmt.Println("")
 				drawHangman(incorrectCounter)
 				gL++
@@ -78,8 +76,8 @@ func main() {
 
 			}
 		} else {
-			fmt.Println("")
 			fmt.Println("Thats Is Not A Valid Input Or You Have Already Guessed That Letter, Try Again")
+			fmt.Println("")
 		}
 		fmt.Println("So far you have guessed:")
 		fmt.Println(strings.Join(guessedLetter, ", "))
@@ -109,7 +107,6 @@ func guessLetter(wordToGuess string, guessCharacter string) bool {
 	return strings.Contains(lowerWordToGuess, lowerCaseCharacter)
 }
 func replaceDash(wordToGuess string, dashWord string, guessCharacter string) string {
-
 	lowerCaseCharacter := strings.ToLower(guessCharacter)
 	for i, c := range wordToGuess {
 		if string(c) == lowerCaseCharacter {
